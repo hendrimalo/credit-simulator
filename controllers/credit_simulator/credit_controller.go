@@ -18,6 +18,7 @@ func NewCreditSimulatorHandler(c *gin.Engine, ucs service.CreditSimulatorUsecase
 	}
 	csr := c.Group("v1/credit-simulator")
 	csr.POST("/", handler.CreateCreditSimulator)
+	csr.POST("/", handler.CreateCreditSimulatorText)
 
 }
 
@@ -34,6 +35,28 @@ func (ch *CreditSimulatorHandler) CreateCreditSimulator(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": err.Error(),
 		})
+	}
+
+	res := ch.uCS.GenerateCreditSimulation(rate, cs)
+	c.JSON(http.StatusOK, res)
+}
+
+func (ch *CreditSimulatorHandler) CreateCreditSimulatorText(c *gin.Context) {
+	var cs models.CreditSimulator
+
+	cs, err := ch.uCS.ReadFile(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": err.Error(),
+		})
+	}
+
+	rate, err := ch.uCS.CheckRateAndValidationCredit(cs)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": err.Error(),
+		})
+		return
 	}
 
 	res := ch.uCS.GenerateCreditSimulation(rate, cs)

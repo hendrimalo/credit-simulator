@@ -4,14 +4,73 @@ import (
 	"errors"
 	"fmt"
 	models "golang-credit-simulator/models/credit_simulator"
+	"net/http"
+	"os"
+	"strconv"
 	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 type CreditSimulator struct{}
 
 func NewCreditSimulator() CreditSimulatorUsecase {
 	return &CreditSimulator{}
+}
+
+func (cs CreditSimulator) ReadFile(c *gin.Context) (res models.CreditSimulator, err error) {
+	//read file txt
+	path := fmt.Sprintf("./files/input_credit/%s.txt", c.Param("filename"))
+	content, err := os.ReadFile(path)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	//validate format txt
+	data := strings.Split(string(content), ",")
+	if len(data) != 6 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "invalid format txt",
+		})
+		return
+	}
+
+	//desctruction txt to variable
+	vtype, condition, year, downPayment, total, tenor := data[0], data[1], data[2], data[3], data[4], data[5]
+	yearInt, err := strconv.Atoi(year)
+	if err != nil {
+		return
+	}
+
+	//coverting format string to specific request format
+	downPaymentF32, _ := strconv.ParseFloat(downPayment, 32)
+	if err != nil {
+		return
+	}
+
+	totalF32, _ := strconv.ParseFloat(total, 32)
+	if err != nil {
+		return
+	}
+
+	tenorF32, err := strconv.ParseFloat(tenor, 32)
+	if err != nil {
+		return
+	}
+
+	res = models.CreditSimulator{
+		VehicleType:      vtype,
+		VehicleCondition: condition,
+		Year:             yearInt,
+		DownPayment:      float32(downPaymentF32),
+		Total:            float32(totalF32),
+		Tenor:            int(tenorF32),
+	}
+	return
 }
 
 func (cs CreditSimulator) CheckRateAndValidationCredit(req models.CreditSimulator) (rate float32, err error) {
