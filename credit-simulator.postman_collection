@@ -1,0 +1,63 @@
+{
+	"info": {
+		"_postman_id": "688abde9-7fab-445e-8f4c-5437724844cc",
+		"name": "Credit Simulator",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CREATE | Credit Simulator With Text",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:3000/v1/credit-simulator/test1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"v1",
+						"credit-simulator",
+						"test1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CREATE | Credit Simulator With Request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"vehicle_type\": \"CAR\",\r\n    \"vehicle_condition\": \"NEW\",\r\n    \"year\": 2023,\r\n    \"down_payment\": 30000000,\r\n    \"total\": 60000000,\r\n    \"tenor\": 3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/v1/credit-simulator",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"v1",
+						"credit-simulator"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
