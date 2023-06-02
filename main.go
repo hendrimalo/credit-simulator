@@ -14,5 +14,5 @@ func main() {
 	ucs := service.NewCreditSimulator()
 	credit_simulator.NewCreditSimulatorHandler(r, ucs)
 
-	r.Run("localhost:3000")
+	r.Run("0.0.0.0:3000")
 }
