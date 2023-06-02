@@ -18,7 +18,7 @@ func NewCreditSimulatorHandler(c *gin.Engine, ucs service.CreditSimulatorUsecase
 	}
 	csr := c.Group("v1/credit-simulator")
 	csr.POST("/", handler.CreateCreditSimulator)
-	csr.POST("/", handler.CreateCreditSimulatorText)
+	csr.POST("/:filename", handler.CreateCreditSimulatorText)
 
 }
 
